@@ -54,6 +54,8 @@
             margin: 20px;
             border-radius: 10px;
         }
+
+
     </style>
 </head>
 
@@ -122,8 +124,34 @@
     <p>(내 음식과 내 식단을 사용하기 위해서 로그인이 필요합니다.)</p>
     <p>(beta 버전에서 id, password 만으로 간단히 회원가입 가능!)</p>
 
-    <h2>footer 추가 - 연락처, 이메일 등</h2>
 </div>
+
+
+<div class="footer">
+    <p>만든이 : 김태훈 <span class="spacer"></span> Github <a href="https://github.com/DryHoony/calcal">https://github.com/DryHoony/calcal</a></p>
+    <p>Email : xognsdl710@naver.com <span class="spacer"></span> Tel : 010-8951-9074</p>
+</div>
+
+
+<style>
+    .footer {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        /*position: fixed;*/
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /*font-size: 16px; !* 글자 크기 조정 *!*/
+        /*line-height: 1.2; !* 줄 간격 조정 *!*/
+        /*height: 70px; !* 세로 길이 조정 *!*/
+    }
+
+    .spacer {
+        margin-right: 30px; /* 간격 크기를 조절하세요 */
+    }
+</style>
 
 <div class="error-message" th:if="${requiredLogin}">
     <p th:text="${requiredLogin}" class="error"></p>
