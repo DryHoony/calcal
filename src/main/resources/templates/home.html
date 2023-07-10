@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+            border-right: 1px solid #fff;
+            padding-right: 10px;
+        }
+
+        nav ul li:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* 추가된 스타일 - 배경 위로 보이도록 하얀박스로 둘러쌈 */
+        .content {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body style="background-image: url(/image/fruitImage1.jpg)">
+<h1>칼칼</h1>
+
+<nav th:unless="${loginName}">
+    <ul>
+        <li><a href="/">홈</a></li>
+        <li><a href="/food/searchFood">음식 검색</a></li>
+        <li><a href="/food/myFood">내 음식</a></li>
+        <li><a href="/food/myMeal">내 식단</a></li>
+        <li><a href="/member/login">로그인</a></li>
+        <li><a href="/member/signUp">회원가입</a></li>
+    </ul>
+</nav>
+
+<nav th:if="${loginName}">
+    <ul>
+        <li><a href="/">홈</a></li>
+        <li><a href="/food/searchFood">음식 검색</a></li>
+        <li><a href="/food/myFood">내 음식</a></li>
+        <li><a href="/food/myMeal">내 식단</a></li>
+        <li><a href="/member/logout">로그아웃</a></li>
+    </ul>
+</nav>
+
+<!-- 나머지 페이지 콘텐츠 -->
+
+
+<div class="content">
+
+    <div class="loginWelcomeMessage" th:if="${loginName}">
+<!--        <h4 th:value="${loginName}">님 로그인 환영</h4>-->
+        <h4 th:text="${loginName + ' 님 로그인 환영'}"></h4>
+    </div>
+
+    <h2>칼칼 페이지는? Calorie Calculate</h2>
+    <p>내가 먹은 음식에 대한 영양소를 계산할 수 있는 웹 서비스 입니다.</p>
+    <p>식약처 정보를 기반으로 만들어졌습니다.</p>
+    <p>현재는 beta 버전으로 탄단지 등의 기본 정보만을 제공하며, 추후 비타민, 무기질 등이 추가될 예정입니다.</p>
+
+    <h3>사용방법</h3>
+    <ol>
+        <li>음식 검색
+            <ul>
+                <li>원하는 음식을 검색</li>
+                <li>기본검색 / 많은 검색 / 더 많은 검색</li>
+            </ul>
+        </li>
+        <li>내 음식
+            <ul>
+                <li>1단계 검색결과에서 음식명을 클릭하여 '내 음식'으로 저장</li>
+                <li>또는 '내 음식' 페이지에서 '생성'을 클릭하여 직접 입력하여 사용</li>
+            </ul>
+        </li>
+        <li>내 식단
+            <ul>
+                <li>내 음식을 모아서 내 식단을 구성</li>
+                <li>먼저 내 식단을 '생성' 한 후, 내 음식을 체크하여 식단에 '추가'</li>
+                <li>식단의 영양소 합계를 계산</li>
+            </ul>
+        </li>
+    </ol>
+
+    <p>(내 음식과 내 식단을 사용하기 위해서 로그인이 필요합니다.)</p>
+    <p>(beta 버전에서 id, password 만으로 간단히 회원가입 가능!)</p>
+
+    <h2>footer 추가 - 연락처, 이메일 등</h2>
+</div>
+
+<div class="error-message" th:if="${requiredLogin}">
+    <p th:text="${requiredLogin}" class="error"></p>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var requiredLogin = document.querySelector('.error-message');
+        if (requiredLogin) {
+            alert(requiredLogin.textContent);
+        }
+    });
+</script>
+
+
+
+
+</body>
+</html>

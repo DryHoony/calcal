@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 36px; /* 변경: 큰 제목 글꼴 크기 */
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 20px; /* 변경: 왼쪽 여백 추가 */
+            letter-spacing: 2px; /* 변경: 글자 간격 조정 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* 변경: 텍스트 그림자 추가 */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+            border-right: 1px solid #fff;
+            padding-right: 10px;
+        }
+
+        nav ul li:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* 추가된 스타일 - 배경 위로 보이도록 하얀박스로 둘러쌈 */
+        .content {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+<body style="background-image: url(/image/fruitImage1.jpg)">
+<h1>칼칼</h1> <!-- 변경: '칼칼' 제목 추가 -->
+
+<nav th:unless="${loginName}">
+    <ul>
+        <li><a href="/">홈</a></li>
+        <li><a href="/food/searchFood">음식 검색</a></li>
+        <li><a href="/food/myFood">내 음식</a></li>
+        <li><a href="/food/myMeal">내 식단</a></li>
+        <li><a href="/member/login">로그인</a></li>
+        <li><a href="/member/signUp">회원가입</a></li>
+    </ul>
+</nav>
+
+<nav th:if="${loginName}">
+    <ul>
+        <li><a href="/">홈</a></li>
+        <li><a href="/food/searchFood">음식 검색</a></li>
+        <li><a href="/food/myFood">내 음식</a></li>
+        <li><a href="/food/myMeal">내 식단</a></li>
+        <li><a href="/member/logout">로그아웃</a></li>
+    </ul>
+</nav>
+
+
+<!-- 나머지 페이지 콘텐츠 -->
+<div class="content">
+
+    <span style="font-size: 1.5rem; font-weight: bold;">MyFood 수정 페이지</span>
+    <br>
+
+    <form id="myFoodEditForm" method="post" action="/food/myFood/edit">
+        <button type="submit">수정하기</button>
+        <br>
+        <input type="hidden" name="id" th:value="${myFood.getId()}">
+        <input type="hidden" name="memberId" th:value="${myFood.getMemberId()}">
+
+        <label for="foodName">식품명</label>
+        <input type="text" id="foodName" name="foodName" th:value="${myFood.getFoodName()}">
+        <br>
+        <label for="carbohydrate">탄수화물(g)</label>
+        <input type="text" id="carbohydrate" name="carbohydrate" th:value="${myFood.getCarbohydrate()}">
+        <br>
+        <label for="protein">단백질(g)</label>
+        <input type="text" id="protein" name="protein" th:value="${myFood.getProtein()}">
+        <br>
+        <label for="fat">지방(g)</label>
+        <input type="text" id="fat" name="fat" th:value="${myFood.getFat()}">
+        <br>
+        <label for="energy">에너지(kcal)</label>
+        <input type="text" id="energy" name="energy" th:value="${myFood.getEnergy()}">
+        <br>
+        <label for="water">수분(g)</label>
+        <input type="text" id="water" name="water" th:value="${myFood.getWater()}">
+        <br>
+        <label for="servingSize">1회 제공량</label>
+        <input type="text" id="servingSize" name="servingSize" th:value="${myFood.getServingSize()}">
+        <br>
+        <label for="information">추가정보</label>
+        <input type="text" id="information" name="information" th:value="${myFood.getInformation()}">
+        <br>
+
+    </form>
+
+</div>
+
+
+
+
+</body>
+</html>

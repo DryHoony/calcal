@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        h1 {
+            font-size: 36px; /* 변경: 큰 제목 글꼴 크기 */
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 20px; /* 변경: 왼쪽 여백 추가 */
+            letter-spacing: 2px; /* 변경: 글자 간격 조정 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* 변경: 텍스트 그림자 추가 */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+            border-right: 1px solid #fff;
+            padding-right: 10px;
+        }
+
+        nav ul li:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* 추가된 스타일 - 배경 위로 보이도록 하얀박스로 둘러쌈 */
+        .content {
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+
+<body style="background-image: url(/image/fruitImage1.jpg)">
+<h1>칼칼</h1> <!-- 변경: '칼칼' 제목 추가 -->
+
+<nav th:unless="${loginName}">
+    <ul>
+        <li><a href="/">홈</a></li>
+        <li><a href="/food/searchFood">음식 검색</a></li>
+        <li><a href="/food/myFood">내 음식</a></li>
+        <li><a href="/food/myMeal">내 식단</a></li>
+        <li><a href="/member/login">로그인</a></li>
+        <li><a href="/member/signUp">회원가입</a></li>
+    </ul>
+</nav>
+
+<nav th:if="${loginName}">
+    <ul>
+        <li><a href="/">홈</a></li>
+        <li><a href="/food/searchFood">음식 검색</a></li>
+        <li><a href="/food/myFood">내 음식</a></li>
+        <li><a href="/food/myMeal">내 식단</a></li>
+        <li><a href="/member/logout">로그아웃</a></li>
+    </ul>
+</nav>
+
+
+<!-- 나머지 페이지 콘텐츠 -->
+<div class="content">
+    <!--  내용  -->
+
+    <span style="font-size: 1.5rem; font-weight: bold;">MyMeal  </span>
+    <a> 나만의 Food를 모아 나만의 식단을 구성해 보세요</a>
+    <a href="/food/myMeal/create" onclick="mealCreateMessage(this)" >클릭해서 식단 만들기</a> <br>
+    <br>
+    <script>
+        function mealCreateMessage(element){
+            alert("내 식단이 생성되었습니다. 아래에서 확인해 보세요")
+        }
+    </script>
+
+    <div class="meal container" th:each="mealDto:${mealDTOList}">
+
+        <!--  각각의 mealDTO 하나하나 마다 Table을 가짐  -->
+        <span style="font-size: 1.5rem; font-weight: bold;" th:text="${mealDto.getMealName()}">MyFood  </span>
+        <br>
+        <span style="font-size: 1.5rem; font-weight: bold;" th:text="${mealDto.getInformation()}">내 식단에 대한 설명을 추가해보세요 </span>
+        <br>
+
+        <!--    <a th:href="/Food/Meal/Delete/${mealDto.getId()}">삭제하기</a>-->
+        <a th:href="@{/food/myMeal/delete/{mealId}(mealId=${mealDto.getId()})}">식단 삭제하기</a>
+        <!--    <button th:onclick="openPopup(${mealDto.getId()})">식단명, 설명 수정하기</button>-->
+        <button onclick="mealEditPopup(this)" class=""
+                th:mealName="${mealDto.getMealName()}"
+                th:information="${mealDto.getInformation()}"
+                th:id="${mealDto.getId()}"
+                th:memberId="${mealDto.getMemberId()}">식단명, 설명 수정하기</button>
+
+        <script>
+            function mealEditPopup(element){
+                var id = element.getAttribute("id")
+                var memberId = element.getAttribute("memberId");
+
+                var mealName = element.getAttribute("mealName");
+                // var mealName = element.getAttribute("th:mealName");
+                var information = element.getAttribute("information");
+
+                // 팝업 창 생성
+                var popup = window.open("", "mealEditPopup", "width=400,height=300");
+
+                // 팝업 창 내용 생성
+                var popupContent = `
+            <h2>식단명, 설명 수정</h2>
+            <label for="mealName">식단명:</label>
+            <input type="text" id="mealName" value="${mealName}">
+            <br>
+            <label for="information">설명:</label>
+            <textarea id="information">${information}</textarea>
+            <br>
+            <button onclick="saveMeal()">수정하기</button>
+            <button onclick="cancel()">취소</button>
+        `;
+
+                // 팝업 창에 내용 삽입
+                popup.document.body.innerHTML = popupContent;
+
+                // 저장 버튼 클릭 시 수정된 식단 정보 출력
+                // popup.saveMeal = function () {
+                //     // 수정하지 않은 정보 - id , memberId
+                //
+                //     var editedMealName = popup.document.getElementById("mealName").value;
+                //     var editedInformation = popup.document.getElementById("information").value;
+                //
+                //     // 수정한 Meal 객체 생성
+                //     var mealData = {
+                //         id: id,
+                //         memberId: memberId,
+                //         mealName: editedMealName,
+                //         information: editedInformation
+                //     };
+                //
+                //
+                //     // PostMapping("/Food/Meal/Edit")
+                //     fetch("/Food/Meal/Edit", {
+                //         method: "POST",
+                //         headers: {
+                //             "Content-Type": "application/json"
+                //         },
+                //         body: JSON.stringify(mealData)
+                //     })
+                //         .then(response => response.json())
+                //         .then(data => {
+                //             // 서버 응답 처리
+                //             console.log("수정된 식단 정보:", data);
+                //         })
+                //         .catch(error => {
+                //             console.error("에러 발생:", error);
+                //         });
+                // };
+
+                // 저장 버튼 클릭 시 수정된 식단 정보 출력
+                function saveMeal() {
+                    // 수정한 식단 정보
+                    var editedMealName = popup.document.getElementById("mealName").value;
+                    var editedInformation = popup.document.getElementById("information").value;
+
+                    // 수정한 Meal 객체 생성
+                    var mealData = {
+                        id: id,
+                        memberId: memberId,
+                        mealName: editedMealName,
+                        information: editedInformation,
+                    };
+
+                    // PostMapping("/Food/Meal/Edit")
+                    fetch("/food/myMeal/Edit", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(mealData),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            // 서버 응답 처리
+                            console.log("수정된 식단 정보:", data);
+                            popup.close();
+                            window.location.href = "/food/myMeal"; // Redirect to the original page
+                        })
+                        .catch((error) => {
+                            console.error("에러 발생:", error);
+                            popup.close(); // 여기에 걸린다 - 뭐가 문제일까?
+                            window.location.href = "/food/myMeal"; // Redirect to the original page
+                        });
+                }
+
+                function cancel(){
+                    popup.close();
+                }
+
+                // 팝업 창에서 saveMeal 함수에 접근할 수 있도록 전역 스코프로 설정
+                popup.saveMeal = saveMeal;
+                popup.cancel = cancel;
+            }
+        </script>
+
+
+
+        <table id="meal table">
+            <thead>
+            <tr>
+                <th>식품명</th>
+                <th>탄수화물(g)</th>
+                <th>단백질(g)</th>
+                <th>지방(g)</th>
+                <th>에너지(kcal)</th>
+                <th>수분(g)</th>
+                <th>1회 제공량</th>
+                <th>추가정보</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="myfood:${mealDto.getMyFoods()}">
+                <td th:text="${myfood.getFoodName()}"></td>
+                <td th:text="${myfood.getCarbohydrate()}"></td>
+                <td th:text="${myfood.getProtein()}"></td>
+                <td th:text="${myfood.getFat()}"></td>
+                <td th:text="${myfood.getEnergy()}"></td>
+                <td th:text="${myfood.getWater()}"></td>
+                <td th:text="${myfood.getServingSize()}"></td>
+                <td th:text="${myfood.getInformation()}"></td>
+            </tr>
+
+            <!--        영양소 합계 출력-->
+            <tr>
+                <th th:text="${mealDto.getNutrientSum().getFoodName()}"></th>
+                <th th:text="${mealDto.getNutrientSum().getCarbohydrate()}"></th>
+                <th th:text="${mealDto.getNutrientSum().getProtein()}"></th>
+                <th th:text="${mealDto.getNutrientSum().getFat()}"></th>
+                <th th:text="${mealDto.getNutrientSum().getEnergy()}"></th>
+                <th th:text="${mealDto.getNutrientSum().getWater()}"></th>
+                <th th:text="0"></th>
+                <th th:text="${mealDto.getNutrientSum().getInformation()}"></th>
+
+            </tr>
+
+            </tbody>
+        </table>
+
+        <br><br>
+    </div>
+
+
+
+
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 36px; /* 변경: 큰 제목 글꼴 크기 */
+      text-align: center;
+      margin-top: 10px;
+      margin-left: 20px; /* 변경: 왼쪽 여백 추가 */
+      letter-spacing: 2px; /* 변경: 글자 간격 조정 */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* 변경: 텍스트 그림자 추가 */
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      display: inline;
+      margin-right: 15px;
+      border-right: 1px solid #fff;
+      padding-right: 10px;
+    }
+
+    nav ul li:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    /* 테이블 꾸미기 */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid black;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .clickable {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* 추가된 스타일 - 배경 위로 보이도록 하얀박스로 둘러쌈 */
+    .content {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+    }
+
+  </style>
+</head>
+
+<!--<body>-->
+<body style="background-image: url(/image/fruitImage1.jpg)">
+<h1>칼칼</h1> <!-- 변경: '칼칼' 제목 추가 -->
+
+<nav th:unless="${loginName}">
+  <ul>
+    <li><a href="/">홈</a></li>
+    <li><a href="/food/searchFood">음식 검색</a></li>
+    <li><a href="/food/myFood">내 음식</a></li>
+    <li><a href="/food/myMeal">내 식단</a></li>
+    <li><a href="/member/login">로그인</a></li>
+    <li><a href="/member/signUp">회원가입</a></li>
+  </ul>
+</nav>
+
+<nav th:if="${loginName}">
+  <ul>
+    <li><a href="/">홈</a></li>
+    <li><a href="/food/searchFood">음식 검색</a></li>
+    <li><a href="/food/myFood">내 음식</a></li>
+    <li><a href="/food/myMeal">내 식단</a></li>
+    <li><a href="/member/logout">로그아웃</a></li>
+  </ul>
+</nav>
+<br><br>
+
+
+<div class="content">
+
+  <form id="searchForm" method="post" action="/Food/search1">
+    <label for="searchName">검색할 음식 : </label>
+    <input type="text" id="searchName" name="searchName" th:value="${searchName}">
+
+    <button type="submit" onclick="submitForm('/food/search1')">기본 검색</button>
+    <button type="submit" onclick="submitForm('/food/search2')">많은 검색</button>
+    <button type="submit" onclick="submitForm('/food/search3')">더 많은 검색</button>
+  </form>
+
+  <script>
+    function submitForm(searchType) {
+      var form = document.getElementById('searchForm');
+      form.action = searchType;
+      form.submit();
+    }
+  </script>
+
+  <br>
+  <div th:if="${foods}">
+    <span style="font-size: 1.5rem; font-weight: bold;">검색결과 <span th:text="${foods.size()}"></span>개</span>
+  </div>
+  <br>
+  <span> 식품명을 클릭하여 MyFood에 추가해 보세요</span>
+  <br><br>
+
+<!-- table 도 이 안에 담기 -->
+  <div class="foodTable">
+    <table id="foodTable">
+      <thead>
+      <tr>
+        <th>식품명</th>
+        <th>탄수화물(g)</th>
+        <th>단백질(g)</th>
+        <th>지방(g)</th>
+        <th>열량(kcal)</th>
+        <th>수분(g)</th>
+        <th>1회 제공량(g, ml)</th>
+
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="food : ${foods}">
+        <td th:text="${food.getFoodName()}" onclick="myFoodAdd(this)" class="clickable" th:data-food-id="${food.getId()}"></td>
+        <td th:text="${food.getCarbohydrate()}"></td>
+        <td th:text="${food.getProtein()}"></td>
+        <td th:text="${food.getFat()}"></td>
+        <td th:text="${food.getEnergy()}"></td>
+        <td th:text="${food.getWater()}"></td>
+        <td th:text="${food.getServingSize()}"></td>
+
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+
+
+
+
+<script>
+  function myFoodAdd(element) { // JQuery 설정이 필요하다
+    // event.preventDefault();
+    let foodId = element.getAttribute("data-food-id");
+
+    // Ajax 요청
+    $.ajax({
+      type: "POST",
+      url : "/food/myFood/add",
+      data : JSON.stringify({foodId : foodId}),
+      contentType : "application/json", //
+
+      success: function (response) {
+        alert("myFood 에 추가")
+        console.log(response);
+      },
+      error: function (xhr) {
+        alert("로그인이 필요한 서비스 입니다.");
+      }
+
+
+
+    });
+  }
+</script>
+
+</body>
+</html>

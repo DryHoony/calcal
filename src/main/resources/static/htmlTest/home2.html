@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 36px;
+      text-align: center;
+      margin-top: 10px;
+      margin-left: 20px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      display: inline;
+      margin-right: 15px;
+      border-right: 1px solid #fff;
+      padding-right: 10px;
+    }
+
+    nav ul li:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+
+<body style="background-image: url(/image/fruitImage1.jpg)">
+<h1>칼칼</h1>
+<nav>
+  <ul>
+    <li><a href="/">홈</a></li>
+    <li><a href="/">음식 검색</a></li>
+    <li><a href="/myfood">내 음식</a></li>
+    <li><a href="/myschedule">내 식단</a></li>
+    <li><a href="/login">로그인(회원가입)</a></li>
+  </ul>
+</nav>
+
+<!-- 나머지 페이지 콘텐츠 -->
+<h2>칼칼 페이지는? Calorie Calculate</h2>
+<p>내가 먹은 음식에 대한 영양소를 계산할 수 있는 웹 서비스 입니다.</p>
+<p>현재는 beta 버전으로 탄단지 등의 기본 정보만을 제공하며, 추후 비타민, 무기질 등이 추가될 예정입니다.</p>
+
+<h3>사용방법</h3>
+<ol>
+  <li>음식 검색
+    <ul>
+      <li>원하는 음식을 검색</li>
+      <li>기본검색 / 많은 검색 / 더 많은 검색</li>
+    </ul>
+  </li>
+  <li>내 음식
+    <ul>
+      <li>1단계 검색결과에서 음식명을 클릭하여 '내 음식'으로 저장</li>
+      <li>또는 '내 음식' 페이지에서 '생성'을 클릭하여 직접 입력하여 사용</li>
+    </ul>
+  </li>
+  <li>내 식단
+    <ul>
+      <li>내 음식을 모아서 내 식단을 구성</li>
+      <li>먼저 내 식단을 '생성' 한 후, 내 음식을 체크하여 식단에 '추가'</li>
+      <li>식단의 영양소 합계를 계산</li>
+    </ul>
+  </li>
+</ol>
+
+<p>(내 음식과 내 식단을 사용하기 위해서 로그인이 필요합니다.)</p>
+<p>(beta 버전에서 id, password 만으로 간단히 회원가입 가능!)</p>
+</body>
+</html>
