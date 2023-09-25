@@ -1,5 +1,9 @@
-package Hoony.CalCal.food.object;
+package Hoony.CalCal.food;
 
+import Hoony.CalCal.food.object.Food;
+import Hoony.CalCal.food.object.Meal;
+import Hoony.CalCal.food.object.MealFood;
+import Hoony.CalCal.food.object.MyFood;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
